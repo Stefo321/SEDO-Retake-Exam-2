@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     triggers {
-        pollSCM('H/5 * * * *')  // Poll every 5 minutes
+        pollSCM('H/5 * * * *')
     }
     
     stages {
@@ -29,24 +29,11 @@ pipeline {
                 sh 'dotnet test --verbosity normal'
             }
         }
-        
-        stage('Archive Results') {
-            steps {
-                archiveArtifacts artifacts: '**/bin/Release/**/*.dll', fingerprint: true
-                junit '**/TestResults/*.xml'
-            }
-        }
     }
     
     post {
         always {
-            cleanWs()  // Clean workspace
-        }
-        success {
-            echo 'Pipeline succeeded!'
-        }
-        failure {
-            echo 'Pipeline failed!'
+            cleanWs()
         }
     }
 }
